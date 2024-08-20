@@ -32,10 +32,13 @@ ollama.api_key = os.getenv('OLLAMA_API_KEY')
 def GPT_response(text):
     # 接收回應
     #response = openai.Completion.create(model="gpt-3.5-turbo-instruct", prompt=text, temperature=0.5, max_tokens=500)
-    response = ollama.chat(model="phi3", prompt=text, temperature=0.5, max_tokens=500)
-    print(response)
+    ollama_response = requests.post(
+        'http://host.docker.internal:11434/ollama_api',  # 使用您的 Ollama API 地址
+        json={'input': user_message}
+    )
+    print(ollama_response)
     # 重組回應
-    answer = response['choices'][0]['text'].replace('。','')
+    answer = ollama_response['choices'][0]['text'].replace('。','')
     return answer
 
 
